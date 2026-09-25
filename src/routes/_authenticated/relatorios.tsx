@@ -88,7 +88,7 @@ function Relatorios() {
                 <CartesianGrid vertical={false} stroke="var(--border)" />
                 <XAxis dataKey="m" tickLine={false} axisLine={false} fontSize={11} />
                 <YAxis hide />
-                <Tooltip formatter={(v: number) => formatBRL(v)} />
+                <Tooltip formatter={(v) => formatBRL(Number(v))} />
                 <Bar dataKey="Receitas" fill="var(--income)" radius={[6, 6, 0, 0]} />
                 <Bar dataKey="Despesas" fill="var(--expense)" radius={[6, 6, 0, 0]} />
               </BarChart>
@@ -102,7 +102,7 @@ function Relatorios() {
                 <CartesianGrid vertical={false} stroke="var(--border)" />
                 <XAxis dataKey="m" tickLine={false} axisLine={false} fontSize={11} />
                 <YAxis hide />
-                <Tooltip formatter={(v: number) => formatBRL(v)} />
+                <Tooltip formatter={(v) => formatBRL(Number(v))} />
                 <Line type="monotone" dataKey="Saldo" stroke="var(--primary)" strokeWidth={3} dot={{ r: 3 }} />
               </LineChart>
             </ResponsiveContainer>
