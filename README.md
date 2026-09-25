@@ -92,6 +92,32 @@ O Fin interpreta o valor, a categoria e a data, e exibe um **cartão de confirma
 - Git instalado
 
 ### 1. Clonar o repositório
+
 ```bash
 git clone https://github.com/ahferreira01-del/fin-chat-ia.git
 cd fin-chat-ia
+
+2. Instalar as dependências
+npm install
+# ou
+bun install
+
+
+3. Configurar variáveis de ambiente
+Crie um arquivo .env na raiz do projeto com as credenciais do seu backend:
+VITE_SUPABASE_URL=sua_url_do_projeto
+VITE_SUPABASE_PUBLISHABLE_KEY=sua_chave_publica
+
+4. Iniciar o servidor de desenvolvimento
+npm run dev
+# ou
+bun dev
+
+Abra no navegador em http://localhost:8080
+
+📄 Licença
+Distribuído sob a licença MIT. Veja LICENSE para mais informações.
+
+
+
+
