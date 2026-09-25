@@ -1,103 +1,97 @@
-# FinanChat AI: Your Finance Companion
+<div align="center">
 
-Criar o aplicativo completo FinanChat AI, uma solução de organização financeira pessoal mobile-first baseada em conversação com Inteligência Artificial (o assistente Fin).
+# 🌿 FinanChat AI
 
-# 1. Identidade e Branding
-- Nome: FinanChat AI
-- Slogan: "Suas finanças, agora em forma de conversa."
-- Logo / Símbolo: Balão de conversa integrado com gráfico de crescimento ascendente.
-- Estilo: Mobile-first, limpo, fluido, minimalista e acolhedor (referências de UX: WhatsApp para chat, Notion para organização, Duolingo para didática).
-- Paleta de Cores:
-  * Verde Principal: #16A34A (ações de destaque, botões principais, crescimento)
-  * Verde Claro / Suave: #D1FAE5 (destaques, badges)
-  * Fundo da aplicação: #F8FAFC (cinza muito claro)
-  * Cards e superfícies: #FFFFFF (branco puro com cantos arredondados e sombra suave)
-  * Texto principal: #0F172A
-  * Indicadores semânticos: Verde para receitas, Vermelho suave (#EF4444) para despesas, Azul suave (#3B82F6) para metas, Laranja (#F59E0B) para alertas.
-- Tipografia: Inter, com alta legibilidade em valores numéricos e cartões.
+**Organização financeira pessoal inteligente por conversação com IA.**  
+Controle receitas, despesas e metas conversando em linguagem natural com o **Fin**, seu assistente financeiro pessoal.
 
-# 2. Arquitetura de Telas e Navegação
-Navegação inferior fixa (Bottom Navigation Bar) com 5 abas acessíveis a qualquer momento:
-1. Dashboard (Tela inicial pós-login)
-2. Chat (com o assistente Fin)
-3. Metas
-4. Relatórios
-5. Perfil
+[![React](https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
+[![TanStack Start](https://img.shields.io/badge/TanStack_Start_v1-FF4154?style=for-the-badge&logo=tanstack&logoColor=white)](https://tanstack.com/start)
+[![TypeScript](https://img.shields.io/badge/TypeScript_5-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS_v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Lovable Cloud](https://img.shields.io/badge/Lovable_Cloud-PostgreSQL-16A34A?style=for-the-badge)](https://lovable.dev/)
+[![AI SDK](https://img.shields.io/badge/AI_SDK-OpenAI_via_Gateway-10A37F?style=for-the-badge&logo=openai&logoColor=white)](https://sdk.vercel.ai/)
 
-Fluxo completo de telas:
-- Tela de Boas-Vindas: Apresentação com o slogan, destaques de valor e botões "Começar" e "Entrar".
-- Cadastro e Login: Simples e direto.
-- Onboarding:
-  * Pergunta de renda mensal estimada;
-  * Pergunta opcional de saldo inicial disponível em conta (se omitido, padrão R$ 0,00);
-  * Tipo de controle: "Controle Pessoal" ou "Controle Familiar" (no MVP adapta apenas o tom de voz e personalização da linguagem do Fin, mantendo a conta individual);
-  * Criação opcional da primeira meta financeira.
-- Tela Inicial (Dashboard pós-login):
-  * Saudação personalizada (ex: "Olá, André 👋 Vamos ver como estão suas finanças hoje.");
-  * CTA de destaque principal: "Conversar com o Fin" que leva direto para a aba de Chat;
-  * Card Principal de destaque: Saldo Atual;
-  * Cards Secundários: Receitas do Mês, Despesas do Mês, Economia Acumulada;
-  * Gráfico simples Donut de gastos por categoria;
-  * Cards horizontais das Metas ativas com barra de progresso percentual;
-  * Lista de últimas movimentações com opções de visualizar, editar e excluir cada transação;
-  * Empty states amigáveis caso não haja dados ainda ("Você ainda não registrou movimentações." com botão "Conversar com o Fin").
-- Aba de Chat (O coração do produto):
-  * Interface moderna estilo mensageiro com mensagens do usuário alinhadas à direita e do Fin à esquerda;
-  * Pílulas de sugestões rápidas no topo ou rodapé: "+ Gastei dinheiro", "+ Recebi dinheiro", "+ Criar meta", "+ Como estão meus gastos?";
-  * Card interativo de confirmação pré-registro: Sempre que o Fin detectar uma transação na fala do usuário, exibe antes de salvar um card com Tipo, Valor, Descrição, Categoria e Data, com botões [Confirmar], [Editar] e [Cancelar];
-  * Feedback pós-registro com Toast / mensagem de sucesso ("✅ Despesa/Receita registrada com sucesso") acompanhado de ação rápida [Desfazer];
-  * Suporte a inputs de texto e respostas contextuais instantâneas do Fin.
-- Aba de Metas:
-  * Listagem de metas ativas e concluídas com barras de progresso;
-  * Detalhe de cada meta (Valor Atual / Valor Objetivo e % Concluído);
-  * Registro de novos aportes via botão ou via chat ("Guardei R$ 200 para a viagem");
-  * Empty state amigável ("Você ainda não possui metas cadastradas." com botão "Criar Meta").
-- Aba de Relatórios:
-  * Gráfico de gastos por categoria;
-  * Comparação mensal e evolução no tempo (mês civil padrão: dia 1 ao último dia do mês);
-  * Empty state amigável ("Registre movimentações para visualizar relatórios.").
-- Aba de Perfil:
-  * Dados do usuário, renda mensal cadastrada, saldo inicial, alternância entre tom pessoal/familiar e preferências.
+[Demo no Lovable](https://fin-chat-ia.lovable.app) • [Reportar Bug](https://github.com/ahferreira01-del/fin-chat-ia/issues)
 
-# 3. Regras de Negócio e Matemática Financeira
-- Saldo Atual = Saldo Inicial + Total de Receitas - Total de Despesas.
-- Economia Acumulada = Total de Receitas do Mês - Total de Despesas do Mês (métrica simples e direta).
-- Categorias Fixas de Despesa: Alimentação, Transporte, Moradia, Lazer, Saúde, Educação, Outros.
-- Categorias Fixas de Receita: Salário, Freelance, Venda, Outros.
-- Sem categorias personalizadas no MVP. Se houver dúvida ou ambiguidade, classificar em "Outros" ou pedir confirmação.
-- Datas: Quando não especificado pelo usuário, utilizar a data/hora atual da mensagem enviada. Tratar termos relativos como "ontem", "anteontem", "dia 15". Fechamento de relatórios sempre pelo mês civil padrão.
-- Metas: Não possuem data limite obrigatória no MVP; o progresso avança estritamente com aportes registrados.
-- Edição e Exclusão: Qualquer transação editada ou excluída atualiza instantaneamente o Saldo, o Dashboard, as Metas e os Relatórios.
+</div>
 
-# 4. Comportamento e Regras de Ouro do Fin
-- Nome: Fin.
-- Tom de voz: Amigável, educado, didático, motivador, positivo e objetivo.
-- Regra de Ouro Anti-Alucinação: O Fin JAMAIS inventa valores, datas, saldos, receitas, despesas, metas ou comparações históricas. Utiliza estritamente os dados reais do sistema. Se faltar informação, faz perguntas objetivas antes de concluir o registro. Se não houver dados, responde com honestidade: "Ainda não possuo informações suficientes para responder essa pergunta."
+---
 
-# 5. Microinterações e Polimento
-- Transições suaves e fade entre abas e mensagens;
-- Microinterações rápidas ao confirmar registro, aportar em metas e atingir 100% de uma meta;
-- Interface totalmente responsiva e polida mobile-first.
+## 📸 Demonstração Visual
 
-This project was built with [Lovable](https://lovable.dev).
+Para incluir suas capturas de tela no GitHub, arraste os prints diretamente para o README no editor do GitHub:
 
-**Live app**: https://fin-chat-ia.lovable.app
+| 1. Boas-vindas | 2. Dashboard Geral | 3. Chat Inteligente (Fin) |
+| :---: | :---: | :---: |
+| <img width="457" height="898" alt="image" src="https://github.com/user-attachments/assets/d656a964-2c57-422f-8ce5-e18cd778abe6" />| <img width="497" height="919" alt="image" src="https://github.com/user-attachments/assets/a6c3f511-ef74-45a8-a3f1-374838de49b6" />| <img width="457" height="919" alt="image" src="https://github.com/user-attachments/assets/5eeda8ea-b41f-49c2-9c35-f96d7b33b910" />|
 
-## Build with Lovable
+| 4. Metas Financeiras | 5. Relatórios & Gráficos | 6. Onboarding & Perfil |
+| :---: | :---: | :---: |
+| <img width="469" height="909" alt="image" src="https://github.com/user-attachments/assets/c1d8cb46-1a52-4b39-9e83-be9e9477222a" />| <img width="464" height="913" alt="image" src="https://github.com/user-attachments/assets/12e1eb0f-43b5-4b04-86be-44f6d9d05c75" />| <img width="472" height="918" alt="image" src="https://github.com/user-attachments/assets/247d1569-3a3e-4ea0-b58b-48909f438d19" />|
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/2c642cc9-4c96-4f61-8c20-791014bf565c).
+---
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+## 💡 O que é o FinanChat AI?
 
-## Development
+O **FinanChat AI** é um gerenciador financeiro moderno, intuitivo e com foco em dispositivos móveis (*mobile-first*). Em vez de preencher formulários cansativos com dezenas de campos, você simplesmente conversa com o **Fin**:
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+> 🗣️ *"Gastei R$ 45 no almoço hoje"*  
+> 🗣️ *"Recebi R$ 1.200 de um freelance"*  
+> 🗣️ *"Quanto já gastei com alimentação esse mês?"*  
+> 🗣️ *"Quero guardar R$ 150 na meta Viagem"*
 
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
-```
+O Fin interpreta o valor, a categoria e a data, e exibe um **cartão de confirmação interativo** para você aprovar antes de qualquer dado ser salvo.
+
+---
+
+## ✨ Principais Funcionalidades
+
+- 💬 **Assistente Fin com Regra de Ouro Anti-Alucinação**:
+  - Responde com base estritamente nos dados cadastrados na sua conta.
+  - Nunca inventa valores, saldos, despesas ou comparações.
+  - Se não houver dados suficientes, avisa com clareza e transparência.
+- 🛡️ **Segurança em Primeiro Lugar**:
+  - Toda ação financeira passa por confirmação prévia (**Confirmar / Editar / Cancelar**).
+  - Toast de notificação com botão **Desfazer** após cada lançamento.
+- 📊 **Dashboard Dinâmico**:
+  - Saldo atual calculado pela regra: `Saldo = Saldo Inicial + Receitas − Despesas`.
+  - Economia do mês: `Receitas do mês − Despesas do mês`.
+  - Gráfico Donut de distribuição dos gastos.
+  - Acesso rápido às metas ativas e últimas movimentações.
+- 🎯 **Gestão de Metas**:
+  - Crie objetivos financeiros com barra de progresso em tempo real.
+  - Faça aportes diretamente pela aba Metas ou solicitando ao Fin pelo Chat.
+- 📈 **Relatórios Completos**:
+  - Gráficos de gastos por categoria padronizada.
+  - Comparativo mensal e linha de evolução do saldo acumulado.
+- 👥 **Modo Pessoal ou Familiar**:
+  - Alterne o contexto financeiro facilmente nas configurações de perfil.
+- 🔒 **Privacidade Total**:
+  - Autenticação com e-mail/senha ou Google.
+  - Proteção de dados com Row-Level Security (RLS) no PostgreSQL.
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+- **Framework**: TanStack Start v1 (React 19 + SSR + Vite 7)
+- **Roteamento**: TanStack Router com rotas autenticadas (`/_authenticated`)
+- **Estilização**: Tailwind CSS v4 com paleta semântica em OKLCH
+- **Componentes**: Radix UI + shadcn/ui + Lucide Icons
+- **Gráficos**: Recharts
+- **Inteligência Artificial**: Vercel AI SDK (`streamText`) integrado ao Lovable AI Gateway
+- **Banco de Dados & Auth**: Lovable Cloud (PostgreSQL + Auth + RLS)
+
+---
+
+## 🚀 Como Executar Localmente
+
+### Pré-requisitos
+- [Node.js](https://nodejs.org/) (versão 20 ou superior) ou [Bun](https://bun.sh/)
+- Git instalado
+
+### 1. Clonar o repositório
+```bash
+git clone https://github.com/ahferreira01-del/fin-chat-ia.git
+cd fin-chat-ia
