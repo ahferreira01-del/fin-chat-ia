@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls, type UIMessage } from "ai";
 import { useEffect, useRef, useState } from "react";
@@ -25,7 +25,7 @@ function ChatPage() {
   const history = useQuery({
     queryKey: ["chat", user.id],
     staleTime: Infinity,
-    gcTime: 0,
+    gcTime: Infinity,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("chat_messages")
@@ -85,6 +85,25 @@ function ChatWindow({ userId, initial, rowId }: { userId: string; initial: UIMes
   });
 
   const busy = status === "submitted" || status === "streaming";
+  const qc = useQueryClient();
+  const latest = useRef(messages);
+
+  // Keep the cached history in sync so switching tabs never loses messages.
+  useEffect(() => {
+    latest.current = messages;
+    qc.setQueryData(["chat", userId], { rowId: rowRef.current, messages });
+  }, [messages, qc, userId]);
+
+  // Persist whatever exists when leaving the chat screen.
+  useEffect(() => {
+    return () => {
+      const msgs = latest.current;
+      if (!msgs.length) return;
+      const payload = JSON.parse(JSON.stringify(msgs));
+      if (rowRef.current) void supabase.from("chat_messages").update({ message: payload }).eq("id", rowRef.current);
+      else void supabase.from("chat_messages").insert({ message: payload });
+    };
+  }, []);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -100,7 +119,10 @@ function ChatWindow({ userId, initial, rowId }: { userId: string; initial: UIMes
       } else {
         const { data, error } = await supabase.from("chat_messages").insert({ message: payload }).select("id").single();
         if (error) console.error(error);
-        else rowRef.current = data.id;
+        else {
+          rowRef.current = data.id;
+          qc.setQueryData(["chat", userId], { rowId: data.id, messages });
+        }
       }
     })();
     inputRef.current?.focus();
