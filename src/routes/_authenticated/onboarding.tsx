@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Users, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { LogoMark } from "@/components/fin/Logo";
 import { supabase } from "@/integrations/supabase/client";
-import { currentUserId, useInvalidateFinance } from "@/lib/finance";
+import { currentUserId, useInvalidateFinance, useProfile } from "@/lib/finance";
 
 export const Route = createFileRoute("/_authenticated/onboarding")({
   head: () => ({ meta: [{ title: "Primeiros passos — FinanChat AI" }] }),
@@ -23,6 +24,13 @@ function Onboarding() {
   const [goalValue, setGoalValue] = useState("");
   const navigate = useNavigate();
   const invalidate = useInvalidateFinance();
+  const qc = useQueryClient();
+  const profile = useProfile();
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (profile.data?.onboarded && !saving) navigate({ to: "/dashboard", replace: true });
+  }, [profile.data?.onboarded, saving, navigate]);
 
   const steps = [
     {
@@ -71,8 +79,10 @@ function Onboarding() {
   ];
 
   async function finish() {
+    if (saving) return;
+    setSaving(true);
     const uid = await currentUserId();
-    if (!uid) return;
+    if (!uid) return setSaving(false);
     const { error } = await supabase
       .from("profiles")
       .update({
@@ -82,13 +92,19 @@ function Onboarding() {
         onboarded: true,
       })
       .eq("id", uid);
-    if (error) return toast.error("Não foi possível salvar.");
+    if (error) {
+      setSaving(false);
+      return toast.error("Não foi possível salvar.");
+    }
     if (goalName.trim() && Number(goalValue) > 0) {
       await supabase.from("goals").insert({ name: goalName.trim(), target_amount: Number(goalValue) });
     }
+    qc.setQueryData(["profile"], (old: Record<string, unknown> | null | undefined) =>
+      old ? { ...old, monthly_income: Number(income) || 0, initial_balance: Number(balance) || 0, control_type: control, onboarded: true } : old,
+    );
     invalidate();
     toast.success("Tudo pronto! Vamos começar 🎉");
-    navigate({ to: "/dashboard" });
+    navigate({ to: "/dashboard", replace: true });
   }
 
   const s = steps[step];
